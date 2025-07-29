@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="Employee" class="org.example.xmlconf.Employee" scope="prototype" autowire="byType">
+
+        <constructor-arg value="1211"/>
+        <constructor-arg value="Abhi"/>
+<!--        <constructor-arg ref="dep"></constructor-arg>-->
+    </bean>
+
+
+    <bean id="dep" class="org.example.xmlconf.Department" primary="true" >
+        <property name="depName" value="Java"/>
+    </bean>
+
+    <bean id="company" class="org.example.xmlconf.Company"/>
+
+<!--    <bean id="Employee2" class="org.example.xmlconf.Employee" scope="prototype">-->
+
+<!--        <constructor-arg value="1211"></constructor-arg>-->
+<!--        <property name="empName" value="Abhishek"></property>-->
+<!--    </bean>-->
+</beans>

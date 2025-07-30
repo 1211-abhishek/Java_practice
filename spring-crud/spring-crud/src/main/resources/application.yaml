@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: spring-crud
+
+  datasource:
+    url: jdbc:oracle:thin:@//192.168.1.227:1521/xe
+    username: abhishek         # ? Replace with your actual DB username
+    password: sarasu10         # ? Replace with your actual DB password
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update       # Recommended options: none | validate | update | create | create-drop
+    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        dialect: org.hibernate.dialect.Oracle10gDialect
+
+server:
+  port: 9091

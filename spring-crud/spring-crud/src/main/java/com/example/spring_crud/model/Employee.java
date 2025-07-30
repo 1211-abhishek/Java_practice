@@ -9,15 +9,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
+//@Table(name = "EidikoEmployee", indexes ={
+//        @Index(name = "nameIndex", columnList = "empName")
+//})
 public class Employee {
 
     @Id
-   // @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "name1")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer empId;
+    @SequenceGenerator(name = "name1", allocationSize = 50, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "name1")
+    // @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private int empId;
     private String empName;
     private String department;
-
-
 }

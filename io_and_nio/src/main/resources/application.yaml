@@ -1,0 +1,18 @@
+server:
+  port:
+    9091
+
+spring:
+  Application:
+    name: io_and_nio
+
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/xe
+    username: abhishek
+    password: sarasu10
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

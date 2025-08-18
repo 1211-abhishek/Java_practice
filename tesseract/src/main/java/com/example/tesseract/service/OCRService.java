@@ -65,8 +65,8 @@ public class OCRService {
             Files.copy(multipartFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
             OcrPreprocessor.preprocess(imagePath.toString(), imagePathPreProcessed.toString());
-            BufferedImage bufferedImage = ImageIO.read(imagePathPreProcessed.toFile());
-            //BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());
+            //BufferedImage bufferedImage = ImageIO.read(imagePathPreProcessed.toFile());
+            BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());
 
             data = new StringBuilder(tesseract.doOCR(bufferedImage));
             log.info("data : {}", data);
@@ -138,7 +138,9 @@ public class OCRService {
 //                "from the text below. the text contains some garbage values ignore them like for dob sometimes it has 008 and many more , i want cleaned data only. also dont get confused in gender, it can be male ,female or transgender only not anything except this if thereis anything with gender male,female or transgender clean it. Return ONLY JSON without extra text.\n\n" + rawText;
 
         String prompt = "Extract Aadhaar details (aadhaarNumber, name, dob, gender) from the text below. "
+                + "aadharnumber must be of a 12 digit keep in mind"
                 + "Ignore irrelevant/garbage values (e.g., extra numbers like '008' in DOB). "
+                + "Also dob (date of birth) must be in DD/MM/YYYY format"
                 + "Gender must be exactly one of: 'Male', 'Female', or 'Transgender' — clean it if needed. "
                 + "Return ONLY JSON without extra text.\n\n"
                 + rawText;

@@ -18,7 +18,7 @@ public class FileService {
                 || contentType.equals("application/vnd.ms-excel")) {
 
             try (Workbook workbook = WorkbookFactory.create(multipartFile.getInputStream())) {
-                Sheet sheet = workbook.getSheetAt(0); // first sheet
+                Sheet sheet = workbook.getSheetAt(0);
                 StringBuilder sb = new StringBuilder();
 
                 for (Row row : sheet) {

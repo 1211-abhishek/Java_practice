@@ -17,18 +17,14 @@ public class OcrPreprocessor {
             throw new IllegalArgumentException("Cannot read image: " + inputImagePath);
         }
 
-        // Convert to grayscale
         Mat gray = new Mat();
         Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
 
-        // Small blur to reduce noise
         Imgproc.GaussianBlur(gray, gray, new Size(1, 1), 0.5);
 
-        // OTSU thresholding (simpler and preserves sharpness)
         Mat binary = new Mat();
         Imgproc.threshold(gray, binary, 0, 255, Imgproc.THRESH_BINARY + Imgproc.THRESH_OTSU);
 
-        // Save
         Imgcodecs.imwrite(outputImagePath, binary);
 
         return outputImagePath;

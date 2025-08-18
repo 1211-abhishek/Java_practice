@@ -1,9 +1,16 @@
 package com.example.tesseract.service;
 
 import com.example.tesseract.entity.Aadhar;
+import com.example.tesseract.preprocess.OcrPreprocessor;
 import com.example.tesseract.repository.OCRRepository;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -15,14 +22,21 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+//import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
+
+import static java.lang.System.out;
 
 
 @Service
@@ -44,13 +58,18 @@ public class OCRService {
 
         if (contentType.startsWith("image/")) {
 
-            Path imagePath = Paths.get("ocr-image-" + Objects.requireNonNull(multipartFile.getOriginalFilename()).substring(Objects.requireNonNull(multipartFile.getOriginalFilename()).lastIndexOf('.')));
-
+            Path imagePath = Paths.get("ocr-image-" + UUID.randomUUID().toString().substring(0,3) + multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf('.')));
+            Path imagePathPreProcessed = Paths.get("pre-" + imagePath);
+            //Path imagePathPreProcessed = Paths.get("ocr-image-preprocessed" + Objects.requireNonNull(multipartFile.getOriginalFilename()).substring(Objects.requireNonNull(multipartFile.getOriginalFilename()).lastIndexOf('.')));
+            out.println("Printing path : " + imagePathPreProcessed);
             Files.copy(multipartFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-            BufferedImage bufferedImage = ImageIO.read(imagePath.toFile());
+
+            OcrPreprocessor.preprocess(imagePath.toString(), imagePathPreProcessed.toString());
+            BufferedImage bufferedImage = ImageIO.read(imagePathPreProcessed.toFile());
+            //BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());
 
             data = new StringBuilder(tesseract.doOCR(bufferedImage));
-            log.info("data : " + data);
+            log.info("data : {}", data);
 
         } else if (contentType.equals("application/pdf")) {
 
@@ -62,18 +81,15 @@ public class OCRService {
             PDFRenderer pdfRenderer = new PDFRenderer(pdDocument);
 
             for (int page = 0; page < pdDocument.getNumberOfPages(); page++) {
-                BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(page, 800);
+                BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(page, 300);
                 String s = tesseract.doOCR(bufferedImage);
-                System.out.println(s);
+                out.println(s);
                 data.append(s);
             }
         }
 
         Map<String, String> aadharInFoMap = extractAadhaarData(data.toString());
-        aadharInFoMap.forEach((key, value) -> {
-            System.out.println(key + " : " + value);
-        });
-
+        aadharInFoMap.forEach((key, value) -> out.println(key + " : " + value));
 
         Aadhar aadhar = new Aadhar(aadharInFoMap.get("aadhaarNumber"), aadharInFoMap.get("name"), aadharInFoMap.get("dob"), aadharInFoMap.get("gender"));
         return ocrRepository.save(aadhar);
@@ -170,4 +186,49 @@ public class OCRService {
         }
     }
 
+    public ByteArrayOutputStream exportAadharToPdf() {
+
+        Document document = new Document();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        try {
+            PdfWriter.getInstance(document, byteArrayOutputStream);
+            document.open();
+
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            Paragraph title = new Paragraph("Aadhar Report", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(Chunk.NEWLINE);
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{2, 4, 1.5f, 1});
+
+            Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            String[] headers = {"aadhar", "Name", "DOB", "Gender"};
+            for (String header : headers) {
+                PdfPCell hcell = new PdfPCell(new Phrase(header, headFont));
+                hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(hcell);
+            }
+
+            List<Aadhar> aadharList = ocrRepository.findAll();
+
+            for (Aadhar aadhar : aadharList) {
+                table.addCell(String.valueOf(aadhar.getAadharId()));
+                table.addCell(aadhar.getName());
+                table.addCell(String.valueOf(aadhar.getDob()));
+                table.addCell(aadhar.getGender());
+            }
+
+            document.add(table);
+            document.close();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        return byteArrayOutputStream;
+    }
 }

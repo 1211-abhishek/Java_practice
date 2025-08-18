@@ -2,19 +2,17 @@ package com.example.tesseract.controller;
 
 import com.example.tesseract.entity.Aadhar;
 import com.example.tesseract.service.OCRService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
 
 @RestController
 @RequestMapping("/ocr")
@@ -29,5 +27,13 @@ public class OCRController {
        return ocrService.postAadharData(multipartFile);
     }
 
+    @GetMapping("/export-pdf")
+    public ResponseEntity<byte[]> exportToPdf() {
+        ByteArrayOutputStream in = ocrService.exportAadharToPdf();
 
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=students.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(in.toByteArray());
+    }
 }

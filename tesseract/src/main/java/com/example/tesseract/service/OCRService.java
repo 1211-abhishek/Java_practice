@@ -3,7 +3,6 @@ package com.example.tesseract.service;
 import com.example.tesseract.entity.Aadhar;
 import com.example.tesseract.preprocess.OcrPreprocessor;
 import com.example.tesseract.repository.OCRRepository;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lowagie.text.*;

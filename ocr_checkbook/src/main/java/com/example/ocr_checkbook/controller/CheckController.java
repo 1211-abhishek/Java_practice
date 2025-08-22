@@ -17,6 +17,10 @@ public class CheckController {
     @PostMapping("/")
     public String postCheck(@RequestParam MultipartFile multipartFile){
 
-       return checkService.readCheck(multipartFile);
+        try {
+            return checkService.readCheck(multipartFile);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: springboot_crud
+
+  datasource:
+    url: jdbc:oracle:thin:@//192.168.1.227:1521/xe
+    username: abhishek2
+    password: QQAbhishek!
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 9092
+
+appdetails:
+  appName: sp_crud
+  appVersion: 1.0.0

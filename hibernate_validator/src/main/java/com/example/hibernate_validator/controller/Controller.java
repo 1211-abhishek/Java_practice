@@ -1,6 +1,7 @@
 package com.example.hibernate_validator.controller;
 
 import com.example.hibernate_validator.pojo.Employee;
+import com.example.hibernate_validator.responces.Responce;
 import jakarta.validation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,21 +15,22 @@ import java.util.Set;
 public class Controller {
 
     @PostMapping
-    public void postEmployee(@Valid @RequestBody Employee employee){
+    public String postEmployee(@Valid @RequestBody Employee employee){
         System.out.println(employee);
 
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-        Employee employee1 = new Employee();
-        employee1.setEmailId("ssss");
-        employee1.setMobileNumber("12245632179542");
-        System.out.println(employee1);
-
-        Set<ConstraintViolation<Employee>> violations = validator.validate(employee1);
-
-        for (ConstraintViolation<Employee> violation : violations) {
-            System.out.println(violation.getPropertyPath() + ": " + violation.getMessage());
-        }
+        return employee.toString();
+//        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//        Validator validator = factory.getValidator();
+//
+//        Employee employee1 = new Employee();
+//        employee1.setEmailId("ssss");
+//        employee1.setMobileNumber("12245632179542");
+//        System.out.println(employee1);
+//
+//        Set<ConstraintViolation<Employee>> violations = validator.validate(employee1);
+//
+//        for (ConstraintViolation<Employee> violation : violations) {
+//            System.out.println(violation.getPropertyPath() + ": " + violation.getMessage());
+//        }
     }
 }

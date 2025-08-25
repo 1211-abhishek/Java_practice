@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Employee {
 
-    @Nonnull
+    @NotNull
     Integer employeeId;
 
     @Email
     String emailId;
 
-    @Nonnull
+    @NotNull
     private Double salary;
 
     @Digits(integer = 12, message = "mobile number cant exceed 10 digits", fraction = 0)

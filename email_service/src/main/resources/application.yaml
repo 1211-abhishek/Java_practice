@@ -1,0 +1,18 @@
+spring:
+#  config:
+#    import: "classpath:config.properties"
+  mail:
+    username: abhishekghogare.eidiko@gmail.com
+    password: zthdzqegfxavnxdk
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+server:
+  port: 9102

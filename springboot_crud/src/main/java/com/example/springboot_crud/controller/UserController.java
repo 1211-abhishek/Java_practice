@@ -28,38 +28,24 @@ public class UserController {
     UsersService usersService;
 
     @GetMapping("/")
-    @Operation(description = "Operation description", summary = "Operation summary", responses = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful response",
-                    content = @Content(
-                            mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = SingleUserResponse.class)),
-                            examples = @ExampleObject(
-                                    name = "Example Response",
-                                    value = """
-                                            [
-                                              {
-                                                "userId": 101,
-                                                "email": "john.doe@example.com",
-                                                "fullName": "John Doe",
-                                                "phone": "+91-9876543210",
-                                                "avatarURL": "https://example.com/avatar/john.png"
-                                              },
-                                              {
-                                                "userId": 102,
-                                                "email": "jane.smith@example.com",
-                                                "fullName": "Jane Smith",
-                                                "phone": "+91-9123456789",
-                                                "avatarURL": "https://example.com/avatar/jane.png"
-                                              }
-                                            ]
-                                            """
-                            )
-                    )
-            )
-    }
-    )
+    @Operation(description = "Operation description", summary = "Operation summary", responses = {@ApiResponse(responseCode = "200", description = "Successful response", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = SingleUserResponse.class)), examples = @ExampleObject(name = "Example Response", value = """
+            [
+              {
+                "userId": 101,
+                "email": "john.doe@example.com",
+                "fullName": "John Doe",
+                "phone": "+91-9876543210",
+                "avatarURL": "https://example.com/avatar/john.png"
+              },
+              {
+                "userId": 102,
+                "email": "jane.smith@example.com",
+                "fullName": "Jane Smith",
+                "phone": "+91-9123456789",
+                "avatarURL": "https://example.com/avatar/jane.png"
+              }
+            ]
+            """)))})
     public ResponseEntity<List<SingleUserResponse>> getAllUsers() {
         List<Users> allUsers = usersService.getAllUsers();
         log.info("getAllUsers method called");

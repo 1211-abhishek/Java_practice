@@ -3,9 +3,9 @@ spring:
     name: springboot_crud
 
   datasource:
-    url: jdbc:oracle:thin:@//192.168.1.227:1521/xe
-    username: abhishek2
-    password: QQAbhishek!
+    url: jdbc:oracle:thin:@localhost:1521/xe
+    username: abhishek
+    password: sarasu10
     driver-class-name: oracle.jdbc.OracleDriver
 
   jpa:

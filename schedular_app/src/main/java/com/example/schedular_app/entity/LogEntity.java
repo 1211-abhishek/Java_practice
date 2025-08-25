@@ -1,18 +1,17 @@
 package com.example.schedular_app.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "LOG_ENTITY")
 public class LogEntity {
 
     @Id
@@ -22,7 +21,7 @@ public class LogEntity {
 
     private LocalDateTime logTimeStamp;
 
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     private LogType logType;
 
     private String schedularType;

@@ -1,9 +1,18 @@
 spring:
-#  config:
-#    import: "classpath:config.properties"
+  config:
+    import: "classpath:config.properties"
   mail:
+    imap:
+      host: imap.gmail.com
+      port: 993
+      user: abhishekghogare.java@gmail.com
+      password: ${APP_PASSWORD_JAVA}
+      protocol: imaps
+      ssl.enable: true
+
+
     username: abhishekghogare.eidiko@gmail.com
-    password: zthdzqegfxavnxdk
+    password: ${APP_PASSWORD}
     host: smtp.gmail.com
     port: 587
     properties:
@@ -16,3 +25,16 @@ spring:
 
 server:
   port: 9102
+
+message:
+  folder:
+    - "INBOX"
+#    - "[Gmail]"
+    - "[Gmail]/All Mail"
+    - "[Gmail]/Drafts"
+    - "[Gmail]/Important"
+    - "[Gmail]/Sent Mail"
+    - "[Gmail]/Spam"
+    - "[Gmail]/Starred"
+    - "[Gmail]/Trash"
+

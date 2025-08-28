@@ -54,7 +54,7 @@ public class EmailSenderController {
     @GetMapping("/get-mails-by-email")
     public List<EmailResponse> getEmailByEmail(@RequestParam String email){
         try {
-            return emailSenderService.getMessageByRecevedFrom(email);
+            return emailSenderService.getMessageByReceivedFrom(email);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

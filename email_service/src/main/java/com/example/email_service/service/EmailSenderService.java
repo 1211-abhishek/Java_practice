@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static java.awt.SystemColor.text;
-
 
 @Service
 public class EmailSenderService {
@@ -58,7 +56,7 @@ public class EmailSenderService {
     public String sendSimpleMail(String text) {
         System.out.println("Sending simple mail");
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo("abhishekghogare.eidiko@gmail.com");
+        simpleMailMessage.setTo("abhishekghogare.java@gmail.com");
         simpleMailMessage.setSubject("sub something");
         simpleMailMessage.setText(text);
         javaMailSender.send(simpleMailMessage);
@@ -210,7 +208,7 @@ public class EmailSenderService {
 
     }
 
-    public List<EmailResponse> getMessageByRecevedFrom(String email) throws MessagingException {
+    public List<EmailResponse> getMessageByReceivedFrom(String email) throws MessagingException {
 
         Store store = getStore();
         Folder inbox = store.getFolder(messageFolder.getFolder().get(0));
@@ -230,9 +228,9 @@ public class EmailSenderService {
             } catch (IOException | MessagingException e) {
                 throw new RuntimeException(e);
             }
-            List<List> contentList;
+            List<List<String >> contentList;
             try {
-                 contentList = getContent(content);
+                contentList = getContent(content);
             } catch (MessagingException | IOException e) {
                 throw new RuntimeException(e);
             }
@@ -245,25 +243,22 @@ public class EmailSenderService {
             }
 
         });
-        for (EmailResponse emailResponse : emailResponseList) {
 
-            System.out.println(emailResponse);
-        }
         return emailResponseList;
 
 
     }
 
-    public List<List> getContent(Object content) throws MessagingException, IOException {
+    public List<List<String>> getContent(Object content) throws MessagingException, IOException {
 
-        List<List> contentList = new ArrayList<>();
+        List<List<String>> contentList = new ArrayList<>();
         List<String> textList = new ArrayList<>();
         List<String> htmlList = new ArrayList<>();
         List<String> fileNameList = new ArrayList<>();
-        //List<MultipartFile> fileList = new ArrayList<>();
 
         if (content instanceof String) {
-            System.out.println("Body: " + content);
+            textList.add((String) content);
+            contentList.add(textList);
         } else if (content instanceof Multipart) {
             Multipart multipart = (Multipart) content;
             for (int i = 0; i < multipart.getCount(); i++) {
@@ -272,17 +267,21 @@ public class EmailSenderService {
 
                 if (bodyPart.isMimeType("text/plain")) {
                     textList.add((String) bodyPart.getContent());
+                    contentList.add(textList);
                 } else if (bodyPart.isMimeType("text/html")) {
                     htmlList.add((String) bodyPart.getContent());
+                    contentList.add(htmlList);
                 } else {
-                    fileNameList.add(bodyPart.getFileName());
+                    String fileName = bodyPart.getFileName();
+                    if (fileName != null && !fileName.isBlank()) {
+                        fileNameList.add(fileName);
+                    }
                 }
             }
+            if (!fileNameList.isEmpty()) {
+                contentList.add(fileNameList);
+            }
         }
-
-        contentList.add(textList);
-        contentList.add(htmlList);
-        contentList.add(fileNameList);
 
         return contentList;
     }

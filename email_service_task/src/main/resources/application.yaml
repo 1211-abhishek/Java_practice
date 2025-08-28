@@ -1,0 +1,40 @@
+server:
+  port: 9103
+
+spring:
+  application:
+    name: email_service_task
+
+  mail:
+    username: abhishekghogare.eidiko@gmail.com
+    password: ${APP_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+    imap:
+      host: imap.gmail.com
+      port: 993
+#      user: asharkhan.eidiko@gmail.com
+      user: abhishekghogare.java@gmail.com
+      password: ${APP_PASSWORD_JAVA}
+      protocol: imaps
+      ssl-enable: true
+
+message:
+  folder:
+    - "INBOX"
+    #    - "[Gmail]"
+    - "[Gmail]/All Mail"
+    - "[Gmail]/Drafts"
+    - "[Gmail]/Important"
+    - "[Gmail]/Sent Mail"
+    - "[Gmail]/Spam"
+    - "[Gmail]/Starred"
+    - "[Gmail]/Trash"

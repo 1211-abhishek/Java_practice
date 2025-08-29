@@ -18,4 +18,12 @@ public class GlobalExceptionHandler {
         log.error(failedToSendEmail.toString());
         return new ResponseEntity<>(failedToSendEmail,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(SomethingWentWrongException.class)
+    public ResponseEntity<ExceptionResponce> somethingWentWrong(SomethingWentWrongException somethingWentWrong){
+
+        ExceptionResponce somethingWentWrongResponse = new ExceptionResponce("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR, somethingWentWrong.getMessage());
+        log.error(somethingWentWrongResponse.toString());
+        return new ResponseEntity<>(somethingWentWrongResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

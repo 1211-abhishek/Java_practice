@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -112,4 +113,35 @@ public class EmailController {
         }
         return new ResponseEntity<>(recentUnseenEmails, HttpStatus.OK);
     }
+
+    @GetMapping("/get-mails-by")
+    public ResponseEntity<List<EmailFetch>> getEmailsBySender(@RequestParam String receivedFrom, @RequestParam int count) {
+
+        List<EmailFetch> emailsFromSender;
+        try {
+            emailsFromSender = readEmailService.getEmailsFromSender(receivedFrom, count);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<>(emailsFromSender, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/get-mails-by-filter")
+    public ResponseEntity<List<EmailFetch>> getEmailsByFilter(@RequestParam(required = false) String receivedFrom,
+                                                              @RequestParam(required = false) String subject,
+                                                              @RequestParam(required = false) Date startDate,
+                                                              @RequestParam(required = false) Date endDate,
+                                                              @RequestParam int count) {
+
+        List<EmailFetch> emailsFromFilter;
+        try {
+            emailsFromFilter = readEmailService.getEmailsByFilter(receivedFrom, subject, startDate, endDate, count);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<>(emailsFromFilter, HttpStatus.OK);
+    }
+
+
 }

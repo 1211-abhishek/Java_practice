@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-/email_service_task/attachments/*
+/email_service_task/attachments/

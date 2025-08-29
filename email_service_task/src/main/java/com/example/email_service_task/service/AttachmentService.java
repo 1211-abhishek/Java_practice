@@ -13,7 +13,6 @@ public class AttachmentService {
 
     @Async("taskExecutor")
     public void saveAttachments(InputStream attachmentInputStream, String fileName) {
-        System.out.println("In file handling - Thread : " + Thread.currentThread().getName() + " : " + Thread.currentThread().getId());
         String newFileName = UUID.randomUUID().toString().substring(0, 4) + fileName;
 
         try (FileOutputStream fileOutputStream =new FileOutputStream("C:\\Users\\Sreenivas Bandaru\\Desktop\\java_prac\\Java_practice\\email_service_task\\attachments\\" + newFileName)){

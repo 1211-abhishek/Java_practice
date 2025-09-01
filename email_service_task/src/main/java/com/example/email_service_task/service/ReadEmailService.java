@@ -1,5 +1,6 @@
 package com.example.email_service_task.service;
 
+import ch.qos.logback.classic.pattern.DateConverter;
 import com.example.email_service_task.config.IMAPConfig;
 import com.example.email_service_task.config.MessageFolder;
 import com.example.email_service_task.exceptions.SomethingWentWrongException;
@@ -8,10 +9,14 @@ import jakarta.mail.*;
 import jakarta.mail.search.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,6 +34,7 @@ public class ReadEmailService {
     @Autowired
     ExtractContentService extractContentService;
 
+
     public List<EmailFetch> getRecentMails(int count) throws MessagingException, IOException {
 
         Store store = getStore();
@@ -38,68 +44,78 @@ public class ReadEmailService {
         int messageCount = inbox.getMessageCount();
         int startIndex = Math.max(messageCount - count + 1, 1);
 
+        FetchProfile fetchProfile = new FetchProfile();
+        fetchProfile.add(FetchProfile.Item.ENVELOPE);
+        fetchProfile.add(FetchProfile.Item.FLAGS);
+
         Message[] messages = inbox.getMessages(startIndex, messageCount);
-        List<Message> messageList = Arrays.asList(messages);
+        inbox.fetch(messages, fetchProfile);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        List<EmailFetch> emailResponseList = Collections.synchronizedList(new ArrayList<>());
+
+
+        Arrays.stream(messages).forEach(message -> executorService.submit(() -> {
+            prepareEmailResponseList(message, emailResponseList);
+        }));
+
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(2, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        return emailResponseList;
+    }
+
+    public List<EmailFetch> getRecentMailsOld(int count) throws MessagingException, IOException {
+
+        Store store = getStore();
+        store.connect(imapConfig.getHost(), imapConfig.getUser(), imapConfig.getPassword());
+        Folder inbox = store.getFolder(messageFolder.getFolder().get(0));
+        inbox.open(Folder.READ_ONLY);
+        int messageCount = inbox.getMessageCount();
+        int startIndex = Math.max(messageCount - count + 1, 1);
+
+        Message[] messages = inbox.getMessages(startIndex, messageCount);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         List<EmailFetch> emailResponseList = new ArrayList<>();
-//         emailResponseList =
-//                messageList.parallelStream()
-//                        .map(this::prepareEmailResponseList2)
-//                        .collect(Collectors.toList());
 
+//        messageList.forEach(message ->
+//                executorService.submit(()->
+//                {
+//                    prepareEmailResponseList(message, emailResponseList);
+//                }));
 
-//        HashSet<Object> hashSet = new HashSet<>();
-//        ConcurrentHashMap<String,Object> concurrentHashMap = new ConcurrentHashMap<>();
-//
-        messageList.parallelStream().forEach(message -> {
+        Arrays.stream(messages).parallel().forEach(message -> {
             prepareEmailResponseList(message, emailResponseList);
         });
         return emailResponseList;
-
     }
 
 
-    private EmailFetch prepareEmailResponseList2(Message message) {
-        Object content;
-        try {
-            content = message.getContent();
-        } catch (IOException | MessagingException e) {
-            throw new SomethingWentWrongException("Something went wrong");
-        }
-        Map<String, List<String>> contentList;
-        try {
-            contentList = extractContentService.getContent(content);
-        } catch (MessagingException | IOException e) {
-            throw new SomethingWentWrongException("Something went wrong");
-        }
+//    private EmailFetch prepareEmailResponseList2(Message message) {
+//        Object content;
+//        try {
+//            content = message.getContent();
+//        } catch (IOException | MessagingException e) {
+//            throw new SomethingWentWrongException("Something went wrong");
+//        }
+//        Map<String, List<String>> contentList;
+//        try {
+//            contentList = extractContentService.getContent(content);
+//        } catch (MessagingException | IOException e) {
+//            throw new SomethingWentWrongException("Something went wrong");
+//        }
+//
+//        try {
+//            return new EmailFetch(Arrays.toString(message.getFrom()), message.getSentDate(), message.getReceivedDate(), message.getSubject(), contentList);
+//        } catch (MessagingException e) {
+//            throw new SomethingWentWrongException("Something went wrong");
+//        }
+//    }
 
-        try {
-            return new EmailFetch(Arrays.toString(message.getFrom()), message.getSentDate(), message.getReceivedDate(), message.getSubject(), contentList);
-        } catch (MessagingException e) {
-            throw new SomethingWentWrongException("Something went wrong");
-        }
-    }
-
-
-    private void prepareEmailResponseList(Message message, List<EmailFetch> emailResponseList) {
-        Object content;
-        try {
-            content = message.getContent();
-        } catch (IOException | MessagingException e) {
-            throw new SomethingWentWrongException("Something went wrong");
-        }
-        Map<String, List<String>> contentList;
-        try {
-            contentList = extractContentService.getContent(content);
-        } catch (MessagingException | IOException e) {
-            throw new SomethingWentWrongException("Something went wrong");
-        }
-
-        try {
-            emailResponseList.add(new EmailFetch(Arrays.toString(message.getFrom()), message.getSentDate(), message.getReceivedDate(), message.getSubject(), contentList));
-        } catch (MessagingException e) {
-            throw new SomethingWentWrongException("Something went wrong");
-        }
-    }
 
     public List<EmailFetch> getRecentUnseenEmails(int count) throws MessagingException, IOException {
 
@@ -120,7 +136,7 @@ public class ReadEmailService {
         if (count == 0 || messageCount < count) {
             messageList = Arrays.asList(unseenMails);
         } else {
-             int startIndex = Math.max(messageCount - count, 1);
+            int startIndex = Math.max(messageCount - count, 1);
             messageList = Arrays.asList(unseenMails).subList(startIndex, messageCount);
         }
         List<EmailFetch> emailResponseList = new ArrayList<>();
@@ -143,19 +159,15 @@ public class ReadEmailService {
 
         FlagTerm seen = new FlagTerm(new Flags(Flags.Flag.SEEN), false);
 
-//        Message[] unseenMails = inbox.search(seen);
-//        Arrays.sort(unseenMails,Comparator.comparingInt(Message::getMessageNumber));
-//
 //        int start = Math.max(unseenMails.length - count, 0);
 //        Message[] messages = Arrays.copyOfRange(unseenMails, start, unseenMails.length);
 //
         Message[] unseenMails = inbox.search(seen);
         Arrays.sort(unseenMails, Comparator.comparingInt(Message::getMessageNumber));
 
-        List<Message> messageList = Arrays.asList(unseenMails);
         List<EmailFetch> emailResponseList = new ArrayList<>();
 
-        messageList.stream().limit(count).forEach(message -> {
+        Arrays.stream(unseenMails).limit(count).forEach(message -> {
             prepareEmailResponseList(message, emailResponseList);
         });
         return emailResponseList;
@@ -178,10 +190,9 @@ public class ReadEmailService {
             messages = inbox.getMessages(1, count);
         }
 
-        List<Message> messageList = Arrays.asList(messages);
         List<EmailFetch> emailResponseList = new ArrayList<>();
 
-        messageList.forEach(message -> {
+        Arrays.stream(messages).forEach(message -> {
             prepareEmailResponseList(message, emailResponseList);
         });
         return emailResponseList;
@@ -255,7 +266,7 @@ public class ReadEmailService {
 
         int messageCount = filteredMails.length;
         List<Message> messageList;
-        if (count == 0) {
+        if (count == 0 || messageCount <= count) {
             messageList = Arrays.asList(filteredMails);
         } else {
             int startIndex = Math.max(messageCount - count, 1);
@@ -267,6 +278,54 @@ public class ReadEmailService {
             prepareEmailResponseList(message, emailResponseList);
         });
         return emailResponseList;
+    }
+
+    //@Scheduled(cron = "0 * 16 * * ?")
+    public void getYesterdaysUnseenEmails() throws MessagingException {
+        System.out.println("in schedular");
+        Date today = new Date();
+
+        LocalDateTime localDateYesterday = today.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime().minusDays(1);
+
+        Date yesteday =  Date.from(localDateYesterday.atZone(ZoneId.systemDefault()).toInstant());
+
+        Store store = getStore();
+        store.connect(imapConfig.getHost(), imapConfig.getUser(), imapConfig.getPassword());
+        Folder inbox = store.getFolder(messageFolder.getFolder().get(0));
+        inbox.open(Folder.READ_ONLY);
+
+        ReceivedDateTerm receivedDateTerm = new ReceivedDateTerm(ComparisonTerm.EQ,yesteday);
+        Message[] messages = inbox.search(receivedDateTerm);
+
+        List<EmailFetch> emailResponseList = new ArrayList<>();
+
+        Arrays.stream(messages).forEach(message -> {
+            prepareEmailResponseList(message, emailResponseList);
+        });
+        System.out.println(emailResponseList.size());
+    }
+
+    private void prepareEmailResponseList(Message message, List<EmailFetch> emailResponseList) {
+        Object content;
+        try {
+            content = message.getContent();
+        } catch (IOException | MessagingException e) {
+            throw new SomethingWentWrongException("Something went wrong");
+        }
+        Map<String, List<String>> contentList;
+        try {
+            contentList = extractContentService.getContent(content);
+        } catch (MessagingException | IOException e) {
+            throw new SomethingWentWrongException("Something went wrong");
+        }
+
+        try {
+            emailResponseList.add(new EmailFetch(Arrays.toString(message.getFrom()), message.getSentDate(), message.getReceivedDate(), message.getSubject(), contentList));
+        } catch (MessagingException e) {
+            throw new SomethingWentWrongException("Something went wrong");
+        }
     }
 
     private Store getStore() throws NoSuchProviderException {

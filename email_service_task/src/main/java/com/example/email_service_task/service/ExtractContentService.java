@@ -21,18 +21,19 @@ public class ExtractContentService {
     AttachmentService attachmentService;
 
     @Async("taskExecutor")
-    public void getMessageContent(List<Message> messageList, ConcurrentHashMap<String,Object> concurrentHashMap) {
+    public void getMessageContent(List<Message> messageList, ConcurrentHashMap<String, Object> concurrentHashMap) {
 
-       messageList.forEach(message -> {
-           try {
-               Object content = message.getContent();
-               String key = UUID.randomUUID().toString().substring(0,4);
-               concurrentHashMap.put(key,content);
-           } catch (IOException | MessagingException e) {
-               throw new RuntimeException(e);
-           }
-       });
+        messageList.forEach(message -> {
+            try {
+                Object content = message.getContent();
+                String key = UUID.randomUUID().toString().substring(0, 4);
+                concurrentHashMap.put(key, content);
+            } catch (IOException | MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
+
     //@Async("taskExecutor")
     public Map<String, List<String>> getContent(Object content) throws MessagingException, IOException {
         System.out.println("In get content method - Thread : " + Thread.currentThread().getName() + " : " + Thread.currentThread().getId());
@@ -42,16 +43,13 @@ public class ExtractContentService {
         List<String> htmlList = new ArrayList<>();
         List<String> fileNameList = new ArrayList<>();
 
-
         if (content instanceof String) {
             textList.add((String) content);
             contentList.put("text", textList);
-        } else if (content instanceof Multipart) {
-            Multipart multipart = (Multipart) content;
+        } else if (content instanceof Multipart multipart) {
             for (int i = 0; i < multipart.getCount(); i++) {
 
                 BodyPart bodyPart = multipart.getBodyPart(i);
-
                 if (bodyPart.isMimeType("text/plain")) {
                     textList.add((String) bodyPart.getContent());
                     contentList.put("text", textList);

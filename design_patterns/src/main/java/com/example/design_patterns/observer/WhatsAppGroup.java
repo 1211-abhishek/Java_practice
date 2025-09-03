@@ -24,7 +24,6 @@ public class WhatsAppGroup implements Subject{
 
     @Override
     public void notifyMembers(String message) {
-
         System.out.println("notifying member in group : " + groupName);
         for (GroupMember member : groupMembers){
             member.notification(message);

@@ -11,9 +11,6 @@ public class Employee {
 
     private Employee(Builder builder){
         this.employeeName = builder.employeeName;
-        if (builder.employeeName == null){
-            throw new RuntimeException("employee id cant be null");
-        }
         this.employeeId = builder.employeeId;
         this.companyName = builder.companyName;
     }
@@ -54,5 +51,4 @@ public class Employee {
 
         System.out.println(abc.employeeId);
     }
-
 }

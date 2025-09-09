@@ -1,0 +1,26 @@
+server:
+  port: 9104
+
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: abhishek
+    password: sarasu10
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class:  org.hibernate.cache.jcache.JCacheRegionFactory
+
+logging:
+  level:
+    org.hibernate.SQL: debug        # show executed SQL
+    org.hibernate.cache: debug      # show cache activity

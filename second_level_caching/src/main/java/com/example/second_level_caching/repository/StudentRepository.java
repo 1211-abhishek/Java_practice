@@ -1,4 +1,7 @@
-package com.example.second_level_caching.entity.repository;
+package com.example.second_level_caching.repository;
 
-public interface StudentRepository {
+import com.example.second_level_caching.entity.StudentEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface StudentRepository extends JpaRepository<StudentEntity, Integer> {
 }

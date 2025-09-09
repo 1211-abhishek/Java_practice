@@ -1,6 +1,6 @@
 package com.example.design_patterns.iterator;
 
-public class ItertatorWorking {
+public class IteratorWorking {
 
     public static void main(String[] args) {
 

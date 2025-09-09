@@ -1,0 +1,29 @@
+server:
+  port: 9105
+
+spring:
+  application:
+    name: aa
+
+  security:
+    user:
+      name: admin
+      password: admin123
+
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: abhishek
+    password: sarasu10
+#    password: ${ABHISHEK_ORACLE_PASSWORD}
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+logging:
+  level:
+    org:
+      springframework.security: DEBUG

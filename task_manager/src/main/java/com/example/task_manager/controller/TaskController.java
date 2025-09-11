@@ -27,7 +27,8 @@ public class TaskController {
 
         List<TaskResponse> taskResponses = new ArrayList<>();
         for (Task task : allTasks) {
-            taskResponses.add(new TaskResponse(task));
+
+            taskResponses.add(new TaskResponse(new TaskDTO(task.getTaskId(), task.getTaskTitle(), task.getDescription())));
         }
         return new ResponseEntity<>(taskResponses, HttpStatus.OK);
     }
@@ -36,6 +37,7 @@ public class TaskController {
     public ResponseEntity<TaskResponse> postNewTask(@RequestBody TaskDTO taskDTO){
 
         Task task = taskService.postTask(taskDTO);
-        return new ResponseEntity<>(new TaskResponse(task),HttpStatus.OK);
+        TaskDTO taskDTO1 = new TaskDTO(task.getTaskId(), task.getTaskTitle(), task.getDescription());
+        return new ResponseEntity<>(new TaskResponse(taskDTO1),HttpStatus.OK);
     }
 }

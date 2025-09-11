@@ -1,22 +1,22 @@
 package com.example.task_manager.service;
 
+import com.example.task_manager.dto.AuthReqRes;
 import com.example.task_manager.dto.UserDTO;
 import com.example.task_manager.entity.Roles;
 import com.example.task_manager.entity.Users;
-import com.example.task_manager.enums.Role;
 import com.example.task_manager.repository.RoleRepository;
 import com.example.task_manager.repository.UserRepo;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.task_manager.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +25,12 @@ public class UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -58,13 +64,33 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public String authenticateUser(UserDTO userDTO) {
+    public AuthReqRes authenticateUser(UserDTO userDTO) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUserName(), userDTO.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return "fff";
+            String accessToken = jwtUtil.generateJwtAccessToken(userDTO.getUserName());
+            String refreshToken = jwtUtil.generateJwtRefreshToken(userDTO.getUserName());
+
+            return new AuthReqRes(accessToken,refreshToken);
         }
         throw new RuntimeException("Invalid credentials");
+    }
+
+    public AuthReqRes refreshJwtToken(AuthReqRes authReqRes) {
+
+        String oldJwtToken = authReqRes.getAccessToken();
+        String refreshToken = authReqRes.getRefreshToken();
+
+        String userId = jwtUtil.extractUsername(refreshToken);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+        boolean isRefreshTokenValid = jwtUtil.validateToken(refreshToken, userDetails);
+
+        if (isRefreshTokenValid){
+            String newAccessToken = jwtUtil.generateJwtAccessToken(userId);
+            return new AuthReqRes(newAccessToken,refreshToken);
+        }
+        return null;
     }
 }

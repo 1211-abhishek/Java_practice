@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TaskResponse {
 
-    private Task task;
+    private TaskDTO taskDTO;
 }

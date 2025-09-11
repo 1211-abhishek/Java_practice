@@ -1,6 +1,7 @@
 package com.example.task_manager.controller;
 
 
+import com.example.task_manager.dto.AuthReqRes;
 import com.example.task_manager.dto.UserDTO;
 import com.example.task_manager.entity.Users;
 import com.example.task_manager.service.UserService;
@@ -21,15 +22,22 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/login")
-    public String logInUser(@RequestBody UserDTO userDTO){
-
-        return userService.authenticateUser(userDTO);
-    }
     @PostMapping("/register")
     public ResponseEntity<UserDTO> postUser(@RequestBody UserDTO userDTO){
 
         Users users = userService.postUser(userDTO);
         return new ResponseEntity<>(new UserDTO(users.getUserName(), users.getPassword(), users.getRoles().stream().map(r -> r.getRole()).collect(Collectors.toSet())), HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public AuthReqRes logInUser(@RequestBody UserDTO userDTO){
+
+        return userService.authenticateUser(userDTO);
+    }
+
+    @PostMapping("/refresh")
+    public AuthReqRes refreshJwtToken(@RequestBody AuthReqRes authReqRes){
+
+        return userService.refreshJwtToken(authReqRes);
     }
 }

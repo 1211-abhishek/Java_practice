@@ -22,7 +22,7 @@ public class Users {
     private String userName;
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role_table",
             joinColumns = @JoinColumn(name = "user_name"),

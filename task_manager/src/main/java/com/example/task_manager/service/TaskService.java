@@ -2,7 +2,9 @@ package com.example.task_manager.service;
 
 import com.example.task_manager.dto.TaskDTO;
 import com.example.task_manager.entity.Task;
+import com.example.task_manager.entity.Users;
 import com.example.task_manager.repository.TaskRepo;
+import com.example.task_manager.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -18,6 +20,9 @@ public class TaskService {
     @Autowired
     private TaskRepo taskRepo;
 
+    @Autowired
+    private UserRepo userRepo;
+
     public List<Task> getAllTasks() {
 
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication()).getUsername();
@@ -32,6 +37,10 @@ public class TaskService {
         task.setTaskId(taskDTO.getTaskId());
         task.setTaskTitle(taskDTO.getTaskTitle());
         task.setDescription(taskDTO.getDescription());
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Users users = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        task.setUser(users);
 
         return taskRepo.save(task);
     }

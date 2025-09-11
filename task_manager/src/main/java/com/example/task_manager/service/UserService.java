@@ -72,24 +72,28 @@ public class UserService {
             String accessToken = jwtUtil.generateJwtAccessToken(userDTO.getUserName());
             String refreshToken = jwtUtil.generateJwtRefreshToken(userDTO.getUserName());
 
-            return new AuthReqRes(accessToken,refreshToken);
+            return new AuthReqRes(accessToken, refreshToken);
         }
         throw new RuntimeException("Invalid credentials");
     }
 
     public AuthReqRes refreshJwtToken(AuthReqRes authReqRes) {
 
+        System.out.println("in refresh service");
         String oldJwtToken = authReqRes.getAccessToken();
         String refreshToken = authReqRes.getRefreshToken();
 
-        String userId = jwtUtil.extractUsername(refreshToken);
+        System.out.println(oldJwtToken);
+        System.out.println(refreshToken);
 
+        jwtUtil.setType("refresh");
+        String userId = jwtUtil.extractUsername(refreshToken);
         UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
         boolean isRefreshTokenValid = jwtUtil.validateToken(refreshToken, userDetails);
 
-        if (isRefreshTokenValid){
+        if (isRefreshTokenValid) {
             String newAccessToken = jwtUtil.generateJwtAccessToken(userId);
-            return new AuthReqRes(newAccessToken,refreshToken);
+            return new AuthReqRes(newAccessToken, refreshToken);
         }
         return null;
     }

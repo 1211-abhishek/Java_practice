@@ -19,9 +19,20 @@ public class JwtUtil {
     @Autowired
     private UserRepo userRepo;
 
-    private final SecretKey signingKey = Keys.hmacShaKeyFor("/nctxZrIDSnatbXRnVRaf1OO+LOAiduMDjfgYEsAXRQ=".getBytes());
+    private final SecretKey accessSecreteKey = Keys.hmacShaKeyFor("/nctxZrIDSnatbXRnVRaf1OO+LOAiduMDjfgYEsAXRQ=".getBytes());
+    private final SecretKey refreshSecreteKey = Keys.hmacShaKeyFor("/mctxZrIDSnatbXRnVRaf1OO+LOAiduMDjfgYEsAXRQ=".getBytes());
 
+    private SecretKey secretKey = accessSecreteKey; //= Keys.hmacShaKeyFor("/actxZrIDSnatbXRnVRaf1OO+LOAiduMDjfgYEsAXRQ=".getBytes());
 
+    public String type = "";
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String generateJwtAccessToken(String userId) {
         System.out.println(userId);
@@ -31,7 +42,7 @@ public class JwtUtil {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("iss", "Task Manager App");
-        claims.put("type", "access");
+//        claims.put("type", "access");
         claims.put("role", roles);
 
         return Jwts.builder()
@@ -41,7 +52,7 @@ public class JwtUtil {
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))
                 .and()
-                .signWith(signingKey)
+                .signWith(accessSecreteKey)
                 .compact();
     }
 
@@ -52,7 +63,7 @@ public class JwtUtil {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("iss", "Task Manager App");
-        claims.put("type", "refresh");
+//        claims.put("type", "refresh");
         claims.put("role", roles);
 
         return Jwts.builder()
@@ -62,14 +73,23 @@ public class JwtUtil {
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30))
                 .and()
-                .signWith(signingKey)
+                .signWith(refreshSecreteKey)
                 .compact();
     }
 
     private Claims extractAllClaims(String token) {
+
+        if ("access".equalsIgnoreCase(type)){
+            secretKey = accessSecreteKey;
+            System.out.println("access type validation");
+        }else {
+            secretKey = refreshSecreteKey;
+            System.out.println("refresh type validation");
+        }
+
         return Jwts
                 .parser()
-                .verifyWith(signingKey)
+                .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
@@ -85,6 +105,15 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
+
+//        if ("refresh".equalsIgnoreCase(type)){
+//            secretKey = refreshSecreteKey;
+//            System.out.println("access type validation");
+//        }else {
+//            secretKey = accessSecreteKey;
+//            System.out.println("refresh type validation");
+//        }
+//            System.out.println("secrete key" + secretKey);
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
@@ -97,11 +126,11 @@ public class JwtUtil {
         return extractClaims(token, Claims::getExpiration);
     }
 
-    public boolean isAccessToken(String token) {
-        String type = (String) Jwts.parser().verifyWith(signingKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload().get("type");
-        return "access".equals(type);
-    }
+//    public boolean isAccessToken(String token) {
+//        String type = (String) Jwts.parser().verifyWith(accessSecreteKey)
+//                .build()
+//                .parseSignedClaims(token)
+//                .getPayload().get("type");
+//        return "access".equals(type);
+//    }
 }

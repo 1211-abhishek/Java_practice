@@ -38,15 +38,17 @@ public class JwtFilter extends OncePerRequestFilter {
             jwtToken = authentication.substring(7);
             System.out.println("JWT token : " + jwtToken);
         } else {
+            System.out.println("In jwt filter 1 else");
             filterChain.doFilter(request, response);
-            return;
+           return;
         }
+        jwtUtil.setType("access");
 
         String userId = jwtUtil.extractUsername(jwtToken);
-        boolean isAccessToken = jwtUtil.isAccessToken(jwtToken);
-        if(!isAccessToken){
-            throw new RuntimeException("Invalid token");
-        }
+//        boolean isAccessToken = jwtUtil.isAccessToken(jwtToken);
+//        if(!isAccessToken){
+//            throw new RuntimeException("Invalid token");
+//        }
 
         System.out.println("User id : " + userId);
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {

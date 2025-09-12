@@ -25,6 +25,7 @@ public class ReadEmailService {
 
     @Autowired
     IMAPConfig imapConfig;
+
     @Autowired
     MessageFolder messageFolder;
 

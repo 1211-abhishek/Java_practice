@@ -21,10 +21,10 @@ spring:
     imap:
       host: imap.gmail.com
       port: 993
-      user: asharkhan.eidiko@gmail.com
-      password: mgxaotozyyxouzxj
-#      user: abhishekghogare.java@gmail.com
-#      password: ${APP_PASSWORD_JAVA}
+#      user: asharkhan.eidiko@gmail.com
+#      password: mgxaotozyyxouzxj
+      user: abhishekghogare.java@gmail.com
+      password: ${APP_PASSWORD_JAVA}
       protocol: imaps
       ssl-enable: true
 
@@ -39,3 +39,9 @@ message:
     - "[Gmail]/Spam"
     - "[Gmail]/Starred"
     - "[Gmail]/Trash"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

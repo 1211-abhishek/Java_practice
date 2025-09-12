@@ -1,8 +1,8 @@
 package com.example.spring_security_blog_app.service;
 
 import com.example.spring_security_blog_app.entity.BlogUsers;
-import com.example.spring_security_blog_app.model.UserModel;
 import com.example.spring_security_blog_app.repository.UsersRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +22,7 @@ public class MyUserDetailsService implements UserDetailsService {
     private UsersRepository usersRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         BlogUsers user = usersRepository.findByUserName(username);

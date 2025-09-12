@@ -1,12 +1,9 @@
 package com.example.spring_security_blog_app.entity;
 
-import com.example.spring_security_blog_app.util.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,8 +20,10 @@ public class BlogUsers {
 
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<Roles> roles = new HashSet<>();
-
-
+    @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )    private Set<Roles> roles = new HashSet<>();
 }

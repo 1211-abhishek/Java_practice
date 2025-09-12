@@ -1,11 +1,13 @@
 package com.example.spring_security_blog_app.config;
 
+import com.example.spring_security_blog_app.exceptions.securit.CustomAuthenticationEntryPoint;
 import com.example.spring_security_blog_app.filter.JWTFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -29,6 +31,9 @@ public class SecurityConfig {
     @Autowired
     JWTFilter jwtFilter;
 
+    @Autowired
+    CustomAuthenticationEntryPoint authenticationEntryPoint;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -37,7 +42,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/user/login").permitAll()
                         .requestMatchers("/blog/**").hasAuthority("USER")
                         .anyRequest().permitAll()
-                )
+                ).exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

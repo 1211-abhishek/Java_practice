@@ -1,5 +1,6 @@
 package com.example.spring_security_blog_app.filter;
 
+import com.example.spring_security_blog_app.exceptions.securit.TestException;
 import com.example.spring_security_blog_app.security.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,12 +33,16 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String authorization = request.getHeader("Authorization");
 
-        if(authorization==null || !authorization.startsWith("Bearer ")){
-            filterChain.doFilter(request,response);
-            return;
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+
+                 new TestException("testing exception Handling in filter");
+
+
+            //filterChain.doFilter(request,response);
+//            return;
         }
 
-        String jwtToken="";
+        String jwtToken = "";
 
         if (authorization.startsWith("Bearer ")) {
             jwtToken = authorization.substring(7);

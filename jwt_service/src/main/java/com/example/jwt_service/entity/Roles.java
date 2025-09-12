@@ -1,9 +1,6 @@
-package com.example.task_manager.entity;
+package com.example.jwt_service.entity;
 
-import com.example.task_manager.enums.Role;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,12 +1,12 @@
-package com.example.task_manager.service;
+package com.example.jwt_service.service;
 
-import com.example.task_manager.dto.AuthReqRes;
-import com.example.task_manager.dto.UserDTO;
-import com.example.task_manager.entity.Roles;
-import com.example.task_manager.entity.Users;
-import com.example.task_manager.repository.RoleRepository;
-import com.example.task_manager.repository.UserRepo;
-import com.example.task_manager.util.JwtUtil;
+import com.example.jwt_service.dto.AuthReqRes;
+import com.example.jwt_service.dto.UserDTO;
+import com.example.jwt_service.entity.Roles;
+import com.example.jwt_service.entity.Users;
+import com.example.jwt_service.repository.RoleRepository;
+import com.example.jwt_service.repository.UserRepo;
+import com.example.jwt_service.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

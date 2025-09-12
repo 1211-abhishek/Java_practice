@@ -1,6 +1,6 @@
-package com.example.task_manager.repository;
+package com.example.jwt_service.repository;
 
-import com.example.task_manager.entity.Roles;
+import com.example.jwt_service.entity.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

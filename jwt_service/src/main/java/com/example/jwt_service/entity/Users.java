@@ -1,4 +1,4 @@
-package com.example.task_manager.entity;
+package com.example.jwt_service.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

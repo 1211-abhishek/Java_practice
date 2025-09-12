@@ -1,6 +1,6 @@
-package com.example.task_manager.repository;
+package com.example.jwt_service.repository;
 
-import com.example.task_manager.entity.Users;
+import com.example.jwt_service.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

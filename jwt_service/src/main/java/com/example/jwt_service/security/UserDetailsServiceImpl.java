@@ -1,9 +1,9 @@
-package com.example.task_manager.security;
+package com.example.jwt_service.security;
 
-import com.example.task_manager.dto.UserDTO;
-import com.example.task_manager.entity.Roles;
-import com.example.task_manager.entity.Users;
-import com.example.task_manager.repository.UserRepo;
+import com.example.jwt_service.dto.UserDTO;
+import com.example.jwt_service.entity.Roles;
+import com.example.jwt_service.entity.Users;
+import com.example.jwt_service.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

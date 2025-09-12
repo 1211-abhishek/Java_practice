@@ -1,10 +1,11 @@
-package com.example.task_manager.util;
+package com.example.jwt_service.util;
 
-import com.example.task_manager.entity.Users;
-import com.example.task_manager.repository.UserRepo;
+import com.example.jwt_service.entity.Users;
+import com.example.jwt_service.repository.UserRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -22,17 +23,8 @@ public class JwtUtil {
     private final SecretKey accessSecreteKey = Keys.hmacShaKeyFor("/nctxZrIDSnatbXRnVRaf1OO+LOAiduMDjfgYEsAXRQ=".getBytes());
     private final SecretKey refreshSecreteKey = Keys.hmacShaKeyFor("/mctxZrIDSnatbXRnVRaf1OO+LOAiduMDjfgYEsAXRQ=".getBytes());
 
-    private SecretKey secretKey = accessSecreteKey; //= Keys.hmacShaKeyFor("/actxZrIDSnatbXRnVRaf1OO+LOAiduMDjfgYEsAXRQ=".getBytes());
-
+    @Setter
     public String type = "";
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String generateJwtAccessToken(String userId) {
         System.out.println(userId);
@@ -42,7 +34,6 @@ public class JwtUtil {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("iss", "Task Manager App");
-//        claims.put("type", "access");
         claims.put("role", roles);
 
         return Jwts.builder()
@@ -62,8 +53,7 @@ public class JwtUtil {
         List<String> roles = users.getRoles().stream().map(role -> role.getRole()).toList();
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("iss", "Task Manager App");
-//        claims.put("type", "refresh");
+        claims.put("iss", "Java App");
         claims.put("role", roles);
 
         return Jwts.builder()
@@ -79,6 +69,7 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
 
+        SecretKey secretKey;
         if ("access".equalsIgnoreCase(type)){
             secretKey = accessSecreteKey;
             System.out.println("access type validation");
@@ -106,14 +97,6 @@ public class JwtUtil {
 
     public boolean validateToken(String token, UserDetails userDetails) {
 
-//        if ("refresh".equalsIgnoreCase(type)){
-//            secretKey = refreshSecreteKey;
-//            System.out.println("access type validation");
-//        }else {
-//            secretKey = accessSecreteKey;
-//            System.out.println("refresh type validation");
-//        }
-//            System.out.println("secrete key" + secretKey);
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
@@ -125,12 +108,4 @@ public class JwtUtil {
     public Date extractExpireDate(String token) {
         return extractClaims(token, Claims::getExpiration);
     }
-
-//    public boolean isAccessToken(String token) {
-//        String type = (String) Jwts.parser().verifyWith(accessSecreteKey)
-//                .build()
-//                .parseSignedClaims(token)
-//                .getPayload().get("type");
-//        return "access".equals(type);
-//    }
 }

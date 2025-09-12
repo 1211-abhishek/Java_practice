@@ -1,6 +1,6 @@
-package com.example.task_manager.dto;
+package com.example.jwt_service.dto;
 
-import com.example.task_manager.entity.Roles;
+import com.example.jwt_service.entity.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

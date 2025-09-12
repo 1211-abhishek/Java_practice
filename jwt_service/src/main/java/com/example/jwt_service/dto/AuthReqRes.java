@@ -1,4 +1,4 @@
-package com.example.task_manager.dto;
+package com.example.jwt_service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

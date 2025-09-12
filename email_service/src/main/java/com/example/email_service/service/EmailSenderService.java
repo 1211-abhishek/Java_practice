@@ -6,6 +6,7 @@ import com.example.email_service.responces.EmailResponse;
 import jakarta.mail.*;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.search.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,11 +16,13 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-
+@Slf4j
 @Service
 public class EmailSenderService {
 
@@ -39,28 +42,28 @@ public class EmailSenderService {
     // @Scheduled(fixedDelay = 10000)
     public void sendSimpleMailAtFixedRate() {
 
-        System.out.println("sending mail : " + LocalDateTime.now().format(formatter));
+        log.info("sending mail : {}", LocalDateTime.now().format(formatter));
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
         simpleMailMessage.setTo("abhishekghogare.java@gmail.com");
         simpleMailMessage.setSubject("mail test : " + i);
 //        simpleMailMessage.setText("This is test mail " + i++);
         simpleMailMessage.setText("This is test mail " + i++ + System.lineSeparator() + "Date time : " + LocalDateTime.now());
-        System.out.println(simpleMailMessage);
+        log.info(simpleMailMessage.toString());
         javaMailSender.send(simpleMailMessage);
 
-        System.out.println("mail sent : " + LocalDateTime.now().format(formatter));
+        log.info("mail sent : {}", LocalDateTime.now().format(formatter));
 
     }
 
     public String sendSimpleMail(String text) {
-        System.out.println("Sending simple mail");
+        log.info("Sending simple mail");
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo("abhishekghogare.java@gmail.com");
         simpleMailMessage.setSubject("sub something");
         simpleMailMessage.setText(text);
         javaMailSender.send(simpleMailMessage);
-        System.out.println("Sent simple mail");
+        log.info("Sent simple mail");
         return "Success";
     }
 
@@ -119,53 +122,52 @@ public class EmailSenderService {
         Message[] messages = inbox.getMessages(startIndex, messageCount);
         Arrays.sort(messages, Comparator.comparing(Message::getMessageNumber));
 
-//        Arrays.stream(messages).forEach(message -> System.out.println(message.getMessageNumber()));
+//        Arrays.stream(messages).forEach(message -> log.info(message.getMessageNumber()));
 
         for (Message message : messages) {
 
-            Address[] from = message.getFrom();
-            Address[] allRecipients = message.getAllRecipients();
-            String subject = message.getSubject();
-            Flags flags = message.getFlags();
             Object content = message.getContent();
-            String contentType = message.getContentType();
-            String description = message.getDescription();
-            String description1 = message.getDisposition();
-
-
-            System.out.println("From: " + Arrays.toString(from));
-            System.out.println("All Recipients: " + Arrays.toString(allRecipients));
-            System.out.println("Subject: " + subject);
-            System.out.println("Flags: " + flags);
-            System.out.println("Content: " + content);
-            System.out.println("Content Type: " + contentType);
-            System.out.println("Description: " + description);
-            System.out.println("Disposition: " + description1);
+//            Address[] from = message.getFrom();
+//            Address[] allRecipients = message.getAllRecipients();
+//            String subject = message.getSubject();
+//            Flags flags = message.getFlags();
+//            String contentType = message.getContentType();
+//            String description = message.getDescription();
+//            String description1 = message.getDisposition();
+//
+//
+//            log.info("From: " + Arrays.toString(from));
+//            log.info("All Recipients: " + Arrays.toString(allRecipients));
+//            log.info("Subject: " + subject);
+//            log.info("Flags: " + flags);
+//            log.info("Content: " + content);
+//            log.info("Content Type: " + contentType);
+//            log.info("Description: " + description);
+//            log.info("Disposition: " + description1);
 
             if (content instanceof String) {
-                System.out.println("Body: " + content);
-            } else if (content instanceof Multipart) {
-                Multipart multipart = (Multipart) content;
+                log.info("Body: {}", content);
+            } else if (content instanceof Multipart multipart) {
                 for (int i = 0; i < multipart.getCount(); i++) {
                     BodyPart bodyPart = multipart.getBodyPart(i);
                     String partType = bodyPart.getContentType();
 
-                    System.out.println("---- Part " + (i + 1) + " (" + partType + ") ----");
+                    log.info("---- Part {} ({}) ----", i + 1, partType);
 
                     if (bodyPart.isMimeType("text/plain")) {
-                        System.out.println("Text: " + bodyPart.getContent());
+                        log.info("Text: {}", bodyPart.getContent());
                     } else if (bodyPart.isMimeType("text/html")) {
-                        System.out.println("HTML: " + bodyPart.getContent());
+                        log.info("HTML: {}", bodyPart.getContent());
                     } else {
-                        System.out.println("Attachment/Other Content: " + bodyPart.getFileName());
+                        log.info("Attachment/Other Content: {}", bodyPart.getFileName());
                     }
                 }
             }
-            System.out.println("------------");
+            log.info("------------");
         }
 
-        System.out.println(messages.length);
-        System.out.println(inbox.getMessageCount());
+        log.info(String.valueOf(messages.length));
+        log.info("message count : {}",inbox.getMessageCount());
         inbox.close(false);
         store.close();
     }
@@ -181,30 +183,30 @@ public class EmailSenderService {
         ReceivedDateTerm receivedDateTerm = new ReceivedDateTerm(ReceivedDateTerm.EQ, date);
 
 //        AndTerm andTerm = new AndTerm(new SearchTerm[]{flagTerm,receivedDateTerm});
-        Message[] messages = inbox.search(receivedDateTerm);
+//        Message[] messages = inbox.search(receivedDateTerm);
 
-        Arrays.stream(messages).forEach(message -> {
-            System.out.println(message.getMessageNumber());
-        });
+//        Arrays.stream(messages).forEach(message -> {
+//            log.info(message.getMessageNumber());
+//        });
 
 
-//        Message[] messages = inbox.getMessages();
-//        long messageCount = Arrays.stream(messages).filter(message -> {
-//            try {
-//                Date received = message.getReceivedDate();
-//                LocalDate receivedDate = received.toInstant()
-//                        .atZone(ZoneId.systemDefault())
-//                        .toLocalDate();
-//
-//                LocalDate today = LocalDate.now();
-//
-//                return receivedDate.equals(today);
-//            } catch (MessagingException e) {
-//                System.out.println("no messages found");
-//                throw new RuntimeException(e);
-//            }
-//        }).count();
-//        System.out.println(messageCount);
+        Message[] messages = inbox.getMessages();
+        long messageCount = Arrays.stream(messages).filter(message -> {
+            try {
+                Date received = message.getReceivedDate();
+                LocalDate receivedDate = received.toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+
+                LocalDate today = LocalDate.now();
+
+                return receivedDate.equals(today);
+            } catch (MessagingException e) {
+                log.info("no messages found");
+                throw new RuntimeException(e);
+            }
+        }).count();
+        log.info(String.valueOf(messageCount));
 
     }
 
@@ -215,14 +217,14 @@ public class EmailSenderService {
         inbox.open(Folder.READ_ONLY);
         FromStringTerm fromStringTerm = new FromStringTerm(email);
         Message[] messages = inbox.search(fromStringTerm);
-        System.out.println(messages.length);
+        log.info("Message length : {}",messages.length);
 
         List<Message> messageList = Arrays.asList(messages);
         List<EmailResponse> emailResponseList = new ArrayList<>();
 
-        messageList.stream().forEach(message -> {
+        messageList.forEach(message -> {
 
-            Object content = null;
+            Object content;
             try {
                 content = message.getContent();
             } catch (IOException | MessagingException e) {
@@ -236,7 +238,7 @@ public class EmailSenderService {
             }
 
             try {
-                System.out.println(message.getMessageNumber());
+                log.info("Message number : {}",message.getMessageNumber());
                 emailResponseList.add(new EmailResponse(Arrays.toString(message.getFrom()), message.getSentDate(), message.getReceivedDate(), message.getSubject(), contentList));
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
@@ -259,11 +261,9 @@ public class EmailSenderService {
         if (content instanceof String) {
             textList.add((String) content);
             contentList.add(textList);
-        } else if (content instanceof Multipart) {
-            Multipart multipart = (Multipart) content;
+        } else if (content instanceof Multipart multipart) {
             for (int i = 0; i < multipart.getCount(); i++) {
                 BodyPart bodyPart = multipart.getBodyPart(i);
-                String partType = bodyPart.getContentType();
 
                 if (bodyPart.isMimeType("text/plain")) {
                     textList.add((String) bodyPart.getContent());
@@ -294,7 +294,7 @@ public class EmailSenderService {
         properties.put("mail.imap.ssl.enable", true);
 
         Session instance = Session.getInstance(properties);
-        Store store = null;
+        Store store;
         try {
             store = instance.getStore(imapConfig.getProtocol());
             store.connect(imapConfig.getHost(), imapConfig.getUser(), imapConfig.getPassword());

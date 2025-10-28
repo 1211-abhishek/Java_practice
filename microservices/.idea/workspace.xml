@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="542e0582-294c-4103-b589-532506cd0f4c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/e_commerce/query_service/src/main/java/com/example/query_service/controller/SellerController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/query_service/src/main/java/com/example/query_service/dto/ProductDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/query_service/src/main/java/com/example/query_service/entity/Product.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/query_service/src/main/java/com/example/query_service/entity/Roles.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/query_service/src/main/java/com/example/query_service/entity/Users.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/query_service/src/main/java/com/example/query_service/repository/ProductRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/query_service/src/main/java/com/example/query_service/services/SellerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/query_service/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/controller/RoleController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/dto/RolesDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/dto/UserDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/entity/Roles.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/entity/Users.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/exception/InvalidCredentialsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/exception/InvalidRolesException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/exception/InvalidTokenException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/exception/UserAlreadyPresent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/exception/handler/ErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/exception/handler/GlobalException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/model/LogIdPassword.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/repository/RoleRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/response/JwtResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/security/JwtFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/security/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/security/UserDetailsServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/service/RoleService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/java/com/example/security_service/util/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_commerce/security_service/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mock_backend/src/main/java/com/example/mock_backend/controller/PostController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mock_backend/src/main/java/com/example/mock_backend/model/Post.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest_template/src/main/java/com/example/rest_template/configuration/RestConf.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest_template/src/main/java/com/example/rest_template/controller/MockBackendController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest_template/src/main/java/com/example/rest_template/controller/MockDataController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest_template/src/main/java/com/example/rest_template/dto/Post.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest_template/src/main/java/com/example/rest_template/exceptions/ErrorHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest_template/src/main/java/com/example/rest_template/interceptor/RestTemplateInterceptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/fiengclient/JsonPlaceholderClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/fiengclient/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/fiengclient/errors/FeignErrorConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rabbitMQ/src/main/java/com/example/rabbitmq/RabbitAmqpTutorialsApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rabbitMQ/src/main/java/com/example/rabbitmq/controller/Controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rabbitMQ/src/main/java/com/example/rabbitmq/tut1/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rabbitMQ/src/main/java/com/example/rabbitmq/tut1/Tut1Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rabbitMQ/src/main/java/com/example/rabbitmq/tut1/Tut1Receiver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rabbitMQ/src/main/java/com/example/rabbitmq/tut1/Tut1Sender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rabbitMQ/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../webclient_practice/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../webclient_practice/src/main/java/com/example/webclient_practice/config/WebClientConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../webclient_practice/src/main/java/com/example/webclient_practice/controller/Controllers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../webclient_practice/src/main/java/com/example/webclient_practice/model/Post.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../webclient_practice/src/main/java/com/example/webclient_practice/service/Services.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../email_service/src/main/java/com/example/email_service/service/EmailSenderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../email_service/src/main/java/com/example/email_service/service/EmailSenderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../email_service_task/src/main/java/com/example/email_service_task/service/ReadEmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../email_service_task/src/main/java/com/example/email_service_task/service/ReadEmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/eureka_service/src/main/java/com/example/eureka_service/EurekaServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/eureka_service/src/main/java/com/example/eureka_service/EurekaServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/eureka_service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/eureka_service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/jwt_service/src/main/java/com/example/jwt_service/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/jwt_service/src/main/java/com/example/jwt_service/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/jwt_service/src/main/java/com/example/jwt_service/security/UserDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/jwt_service/src/main/java/com/example/jwt_service/security/UserDetailsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/jwt_service/src/main/java/com/example/jwt_service/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/jwt_service/src/main/java/com/example/jwt_service/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/fiengclient/JwtServiceClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/fiengclient/JwtServiceClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/task_manager/src/main/java/com/example/task_manager/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../open_feing/task_manager/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../open_feing/task_manager/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../spring_security_1/src/main/java/com/example/spring_security_1/entity/BlogEntity.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "1211-abhishek"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/1211-abhishek/Java_practice.git",
+    "accountId": "4a094b95-6441-487b-a244-8fa642555d62"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="33rUa66mOFlsbXNyn96aM4fv3tM" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="542e0582-294c-4103-b589-532506cd0f4c" name="Changes" comment="" />
+      <created>1760074747609</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760074747609</updated>
+    </task>
+    <servers />
+  </component>
+</project>
